@@ -36,7 +36,21 @@ npx hyperframes render --quality high --fps 30 -o video.mp4
 
 ```
 sapphire-promo/
-├── index.html            ← Single-file composition with all 5 acts + GSAP timeline
+├── index.html            ← Thin shell: HTML structure + 16-line timeline orchestrator
+├── styles/               ← Per-act CSS (base + 5 act files)
+│   ├── base.css          ← Reset, root stage, ambient orb, noise overlay
+│   ├── act1-hook.css
+│   ├── act2-tension.css
+│   ├── act3-reveal.css
+│   ├── act4-authority.css
+│   └── act5-cta.css
+├── scripts/acts/         ← Per-act GSAP animation modules
+│   ├── ambient.js        ← window.__sapphire.animateAmbient(tl)
+│   ├── 01-hook.js
+│   ├── 02-tension.js
+│   ├── 03-reveal.js
+│   ├── 04-authority.js
+│   └── 05-cta.js
 ├── hyperframes.json      ← Project config
 ├── meta.json             ← Project metadata
 ├── gen_audio.py          ← Python audio synthesis script (generates all assets below)
@@ -52,7 +66,7 @@ sapphire-promo/
 └── README.md             ← This file
 ```
 
-The entire video lives in a **single `index.html`**. Every act is a `<div class="scene clip">` with `data-start` / `data-duration` / `data-track-index` — Hyperframes gates visibility automatically and drives the single `window.__timelines["main"]` GSAP timeline deterministically via `beginFrame` for seekable, reproducible renders.
+`index.html` is a thin shell — HTML body structure + `<link>` tags for each CSS file + `<script src>` tags for each act module + a 16-line inline orchestrator that calls each act's `window.__sapphire.animate*(tl)` function on the master GSAP timeline. Every act is still a `<div class="scene clip">` with `data-start` / `data-duration` / `data-track-index` — Hyperframes gates visibility automatically and drives the single `window.__timelines["main"]` GSAP timeline deterministically via `beginFrame` for seekable, reproducible renders.
 
 ---
 
@@ -150,11 +164,17 @@ After second render: *"The Act 4 authority panel is rendering in the lower-half 
 
 Action taken: wrote `gen_audio.py` (Python stdlib synthesis + FFmpeg post-processing) to generate four audio assets. Main track uses a phase-correct kick drum formula, LCG-seeded hi-hat/snare noise, act-synced chord pads and shimmer layers. Three SFX files (impact, whoosh, stab) added as timed `<audio class="clip">` elements. Escalating `data-volume` on the 4 word-reveal hits creates a building dramatic arc. `npx hyperframes lint` still passes with 0 errors.
 
+### Round 11 — Code refactor: split monolithic index.html into per-act files
+> *"The index.html file is flooded with code. Refactor it into multiple files more carefully than the first attempt — which used data-composition-src sub-compositions and caused all five scenes to render simultaneously."*
+
+Action taken: instead of retrying sub-compositions (which carry per-file lifecycle issues), extracted only the CSS and JS into external files — leaving the proven `class="clip"` scene-gating HTML structure intact in `index.html`. Six CSS files (`styles/base.css`, `styles/act1-hook.css` … `styles/act5-cta.css`) and six JS modules (`scripts/acts/ambient.js`, `01-hook.js` … `05-cta.js`) were created. Each JS module attaches a `window.__sapphire.animateXxx(tl)` function; a 16-line inline orchestrator in `index.html` creates the master GSAP timeline, calls each act in order, and registers it on `window.__timelines["main"]`. The orchestrator stays inline because the Hyperframes linter does a static text scan of `index.html` for the `window.__timelines` registration. `index.html` shrank from 1187 → 275 lines. `npx hyperframes lint` passes with 0 errors; a draft render frame-sampled across all five acts was visually confirmed to match the baseline `video.mp4`.
+
 ### Iterations summary
 
 - **2 full draft renders** before the final high-quality render (first to discover the sub-composition gating bug, second to validate the inlined-single-file rewrite).
 - **1 architectural rewrite** (5 sub-composition files → 1 single-file composition) driven by frame inspection.
 - **1 CSS refactor** across 4 elements to decouple CSS centering transforms from GSAP motion.
+- **1 code-organisation refactor** (monolithic `index.html` → thin shell + `styles/` + `scripts/acts/`) after the initial sub-composition attempt failed; used external `<link>`/`<script>` files instead to avoid the lifecycle issue.
 - **Continuous verification** by extracting individual frames at act-boundary timestamps with `ffmpeg -ss <t> -vframes 1` and visually inspecting them — much faster than watching the full video.
 
 ---

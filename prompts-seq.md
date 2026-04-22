@@ -21,3 +21,4 @@ In short, the workflow was:
 3. Execute the build with Opus 4.7.
 4. Review, refine, and document the final result.
 5. Audio overhaul: replaced the ambient drone with a punchy 120-BPM promotional track and added 9 synchronized SFX cues (word-reveal impacts, transition whoosh, brand-reveal stab, scene-entry hits) — see Round 10 in [README.md](./README.md).
+6. Code refactor: split the monolithic `index.html` (1187 lines) into per-act CSS files under `styles/` and per-act GSAP animation modules under `scripts/acts/`, reducing `index.html` to 275 lines — see Round 11 in [README.md](./README.md). Verified with `npx hyperframes lint` (0 errors) and a draft render frame-sampled across all 5 acts.
