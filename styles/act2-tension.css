@@ -1,0 +1,124 @@
+/* =========================================================
+   ACT 2 — TENSION (3.5–7s)
+   ========================================================= */
+#scene-tension { background: #080D1E; z-index: 3; }
+.tension-header {
+  position: absolute;
+  top: 120px;
+  left: 80px;
+  right: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 10;
+  opacity: 0;
+}
+.tension-kicker {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #FF3B3B;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.tension-kicker .warn-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #FF3B3B;
+  border-radius: 50%;
+  margin-right: 14px;
+  vertical-align: middle;
+}
+.tension-title {
+  font-family: 'Archivo Black', 'Inter', sans-serif;
+  font-size: 72px;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.tension-title strong { color: #FF3B3B; }
+.tension-grid {
+  position: absolute;
+  top: 420px;
+  left: 80px;
+  right: 80px;
+  bottom: 180px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 14px;
+}
+.t-panel {
+  position: relative;
+  background: #0D1A33;
+  border: 1px solid rgba(255, 59, 59, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  transform: scale(0.85);
+}
+.t-panel::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 12px;
+  width: 8px; height: 8px;
+  background: #FF3B3B;
+  border-radius: 50%;
+}
+.t-panel-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6B7A99;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.t-panel-val {
+  font-family: 'Archivo Black', 'Inter', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #FF3B3B;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.t-panel-val.small { font-size: 32px; }
+#x-svg {
+  position: absolute;
+  top: 420px;
+  left: 80px;
+  right: 80px;
+  bottom: 180px;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+}
+.x-line { stroke: #FF3B3B; stroke-width: 14; stroke-linecap: round; fill: none; }
+#flash-layer {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  z-index: 30;
+}
+.tension-footer {
+  position: absolute;
+  bottom: 80px;
+  left: 80px;
+  right: 80px;
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #C8D0E0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0;
+}
