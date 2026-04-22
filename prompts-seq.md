@@ -20,3 +20,4 @@ In short, the workflow was:
 2. Generate a structured implementation plan with Sonnet 4.6.
 3. Execute the build with Opus 4.7.
 4. Review, refine, and document the final result.
+5. Audio overhaul: replaced the ambient drone with a punchy 120-BPM promotional track and added 9 synchronized SFX cues (word-reveal impacts, transition whoosh, brand-reveal stab, scene-entry hits) — see Round 10 in [README.md](./README.md).
