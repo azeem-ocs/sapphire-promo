@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --sapphire-core:   #1A5CFF;
+  --sapphire-bright: #3D7BFF;
+  --sapphire-deep:   #0A3ACC;
+  --sapphire-glow:   #6B8FFF;
+  --midnight:        #050B18;
+  --midnight-mid:    #0D1A33;
+  --midnight-soft:   #0A1428;
+  --white-pure:      #FFFFFF;
+  --white-muted:     #C8D0E0;
+  --slate-dim:       #6B7A99;
+  --danger-red:      #FF3B3B;
+  --glass-bg:        rgba(255, 255, 255, 0.04);
+  --glass-border:    rgba(255, 255, 255, 0.10);
+
+  --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--midnight);
+  color: var(--white-pure);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

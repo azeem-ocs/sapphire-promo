@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Sapphire Studios — 20s Promo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #050B18;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      /* =========================================================
+         ROOT STAGE
+         ========================================================= */
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #050B18;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      /* =========================================================
+         AMBIENT LAYER (persistent 20s)
+         ========================================================= */
+      #ambient-orb {
+        position: absolute;
+        width: 1800px;
+        height: 1800px;
+        left: -360px;
+        top: 60px;
+        background: radial-gradient(circle,
+          rgba(10, 58, 204, 0.18) 0%,
+          rgba(26, 92, 255, 0.08) 35%,
+          rgba(5, 11, 24, 0) 65%);
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      #noise-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 99;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.08) 0px,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        mix-blend-mode: overlay;
+      }
+
+      /* =========================================================
+         ACT 1 — HOOK (0–3.5s)
+         ========================================================= */
+      #scene-hook { background: #050B18; z-index: 2; }
+      .hook-grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(26, 92, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(26, 92, 255, 0.06) 1px, transparent 1px);
+        background-size: 80px 80px;
+        opacity: 0;
+      }
+      .hook-radial {
+        position: absolute;
+        width: 1400px;
+        height: 1400px;
+        left: -160px;
+        top: 260px;
+        transform: scale(0);
+        background: radial-gradient(circle, rgba(26, 92, 255, 0.45) 0%, rgba(26, 92, 255, 0) 70%);
+        border-radius: 50%;
+        opacity: 0;
+      }
+      .hook-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 80px;
+      }
+      .hook-kicker {
+        font-family: 'Inter', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #3D7BFF;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        margin-bottom: 32px;
+        opacity: 0;
+      }
+      .hook-kicker .kicker-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background: #3D7BFF;
+        border-radius: 50%;
+        margin-right: 18px;
+        vertical-align: middle;
+        box-shadow: 0 0 20px #3D7BFF;
+      }
+      .hook-line {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-weight: 900;
+        line-height: 0.92;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        overflow: hidden;
+        font-size: 150px;
+      }
+      .hook-line .inner {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(150px);
+      }
+      .hook-line.accent .inner {
+        color: #3D7BFF;
+        text-shadow: 0 0 40px rgba(26, 92, 255, 0.6);
+      }
+      .hook-underline {
+        width: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #3D7BFF, transparent);
+        margin-top: 32px;
+        border-radius: 3px;
+      }
+      .hook-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 32px;
+        font-weight: 500;
+        color: #C8D0E0;
+        letter-spacing: 0.06em;
+        margin-top: 36px;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+      .hook-wipe {
+        position: absolute;
+        inset: 0;
+        background: #050B18;
+        transform: translateY(100%);
+        z-index: 100;
+      }
+      .corner-mark {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        border: 2px solid #3D7BFF;
+        opacity: 0;
+      }
+      .corner-tl { top: 80px; left: 80px; border-right: none; border-bottom: none; }
+      .corner-tr { top: 80px; right: 80px; border-left: none; border-bottom: none; }
+      .corner-bl { bottom: 80px; left: 80px; border-right: none; border-top: none; }
+      .corner-br { bottom: 80px; right: 80px; border-left: none; border-top: none; }
+
+      /* =========================================================
+         ACT 2 — TENSION (3.5–7s)
+         ========================================================= */
+      #scene-tension { background: #080D1E; z-index: 3; }
+      .tension-header {
+        position: absolute;
+        top: 120px;
+        left: 80px;
+        right: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        z-index: 10;
+        opacity: 0;
+      }
+      .tension-kicker {
+        font-family: 'Inter', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: #FF3B3B;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+      .tension-kicker .warn-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: #FF3B3B;
+        border-radius: 50%;
+        margin-right: 14px;
+        vertical-align: middle;
+      }
+      .tension-title {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-size: 72px;
+        font-weight: 900;
+        color: #FFFFFF;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+      }
+      .tension-title strong { color: #FF3B3B; }
+      .tension-grid {
+        position: absolute;
+        top: 420px;
+        left: 80px;
+        right: 80px;
+        bottom: 180px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 14px;
+      }
+      .t-panel {
+        position: relative;
+        background: #0D1A33;
+        border: 1px solid rgba(255, 59, 59, 0.18);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0;
+        transform: scale(0.85);
+      }
+      .t-panel::before {
+        content: '';
+        position: absolute;
+        top: 12px; left: 12px;
+        width: 8px; height: 8px;
+        background: #FF3B3B;
+        border-radius: 50%;
+      }
+      .t-panel-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #6B7A99;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .t-panel-val {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-size: 40px;
+        font-weight: 900;
+        color: #FF3B3B;
+        text-align: center;
+        line-height: 1;
+        letter-spacing: -0.01em;
+      }
+      .t-panel-val.small { font-size: 32px; }
+      #x-svg {
+        position: absolute;
+        top: 420px;
+        left: 80px;
+        right: 80px;
+        bottom: 180px;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+      }
+      .x-line { stroke: #FF3B3B; stroke-width: 14; stroke-linecap: round; fill: none; }
+      #flash-layer {
+        position: absolute;
+        inset: 0;
+        background: white;
+        opacity: 0;
+        z-index: 30;
+      }
+      .tension-footer {
+        position: absolute;
+        bottom: 80px;
+        left: 80px;
+        right: 80px;
+        font-family: 'Inter', sans-serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: #C8D0E0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* =========================================================
+         ACT 3 — REVEAL (7–12.5s)
+         ========================================================= */
+      #scene-reveal { background: #050B18; z-index: 4; }
+      .orb-bg {
+        position: absolute;
+        width: 1600px;
+        height: 1600px;
+        left: -260px;
+        top: 60px;
+        transform: scale(0);
+        background: radial-gradient(circle,
+          rgba(61, 123, 255, 0.28) 0%,
+          rgba(26, 92, 255, 0.12) 40%,
+          rgba(5, 11, 24, 0) 70%);
+        border-radius: 50%;
+        opacity: 0;
+      }
+      .reveal-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(26, 92, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(26, 92, 255, 0.05) 1px, transparent 1px);
+        background-size: 120px 120px;
+        opacity: 0;
+      }
+      .reveal-content {
+        position: absolute;
+        inset: 0;
+        padding: 0 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .reveal-kicker {
+        font-family: 'Inter', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: #3D7BFF;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        opacity: 0;
+      }
+      .reveal-kicker .kdot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: #3D7BFF;
+        border-radius: 50%;
+        margin-right: 16px;
+        vertical-align: middle;
+        box-shadow: 0 0 14px #3D7BFF;
+      }
+      .brand-word {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-weight: 900;
+        font-size: 140px;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        overflow: hidden;
+      }
+      .brand-word .inner {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(180px);
+      }
+      .brand-studios .inner {
+        color: #3D7BFF;
+        text-shadow: 0 0 40px rgba(26, 92, 255, 0.5);
+      }
+      .divider {
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #3D7BFF, #1A5CFF, transparent);
+        margin: 44px 0;
+        box-shadow: 0 0 20px rgba(26, 92, 255, 0.8);
+      }
+      .services {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .service-pill {
+        display: flex;
+        align-items: center;
+        padding: 22px 36px;
+        border: 1.5px solid rgba(255, 255, 255, 0.12);
+        border-radius: 100px;
+        background: rgba(255, 255, 255, 0.04);
+        font-family: 'Inter', sans-serif;
+        font-size: 42px;
+        font-weight: 700;
+        color: #FFFFFF;
+        letter-spacing: 0.01em;
+        opacity: 0;
+        transform: translateY(40px);
+        width: fit-content;
+      }
+      .service-pill .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #3D7BFF;
+        margin-right: 22px;
+        box-shadow: 0 0 14px #3D7BFF;
+        flex-shrink: 0;
+      }
+      .service-pill .svc-tag {
+        font-size: 18px;
+        font-weight: 700;
+        color: #6B7A99;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-left: 20px;
+      }
+      .tagline {
+        font-family: 'Inter', sans-serif;
+        font-size: 32px;
+        font-weight: 500;
+        color: #C8D0E0;
+        letter-spacing: 0.03em;
+        margin-top: 48px;
+        opacity: 0;
+      }
+      .tagline strong { color: #3D7BFF; font-weight: 700; }
+
+      /* =========================================================
+         ACT 4 — AUTHORITY (12.5–16.5s)
+         ========================================================= */
+      #scene-authority {
+        background: #050B18;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .auth-glow {
+        position: absolute;
+        width: 1200px;
+        height: 1200px;
+        left: 50%;
+        top: 50%;
+        margin-left: -600px;
+        margin-top: -600px;
+        background: radial-gradient(circle, rgba(26, 92, 255, 0.25) 0%, rgba(5, 11, 24, 0) 70%);
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0);
+      }
+      .auth-panel {
+        position: relative;
+        width: 920px;
+        background: rgba(13, 26, 51, 0.88);
+        border: 1px solid rgba(61, 123, 255, 0.28);
+        border-radius: 32px;
+        padding: 60px 56px;
+        opacity: 0;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      }
+      .auth-kicker {
+        font-family: 'Inter', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.32em;
+        color: #3D7BFF;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 16px;
+        opacity: 0;
+      }
+      .auth-heading {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-size: 54px;
+        font-weight: 900;
+        color: #FFFFFF;
+        line-height: 1;
+        text-align: center;
+        letter-spacing: -0.02em;
+        margin-bottom: 38px;
+        opacity: 0;
+      }
+      .ticker-wrap {
+        overflow: hidden;
+        position: relative;
+        padding: 14px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 40px;
+        opacity: 0;
+      }
+      .ticker-wrap::before,
+      .ticker-wrap::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 80px;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .ticker-wrap::before { left: 0; background: linear-gradient(to right, rgba(13, 26, 51, 1), rgba(13, 26, 51, 0)); }
+      .ticker-wrap::after { right: 0; background: linear-gradient(to left, rgba(13, 26, 51, 1), rgba(13, 26, 51, 0)); }
+      .ticker {
+        display: flex;
+        gap: 60px;
+        white-space: nowrap;
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-size: 38px;
+        font-weight: 900;
+        color: #C8D0E0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .ticker .bullet { color: #3D7BFF; font-size: 24px; display: inline-flex; align-items: center; }
+      .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+      .stat-card {
+        background: rgba(26, 92, 255, 0.10);
+        border: 1px solid rgba(61, 123, 255, 0.28);
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-align: center;
+        opacity: 0;
+        transform: scale(0.85);
+      }
+      .stat-value {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-size: 84px;
+        font-weight: 900;
+        color: #3D7BFF;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+      .stat-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        color: #C8D0E0;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-top: 14px;
+      }
+      .stat-badge {
+        display: inline-block;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: #3D7BFF;
+        letter-spacing: 0.18em;
+        background: rgba(26, 92, 255, 0.15);
+        border: 1px solid rgba(61, 123, 255, 0.35);
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-top: 10px;
+        text-transform: uppercase;
+      }
+      .sweep-layer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, #1A5CFF 0%, rgba(26, 92, 255, 0.6) 40%, transparent 70%);
+        transform: translateY(100%);
+        z-index: 50;
+      }
+
+      /* =========================================================
+         ACT 5 — CTA (16.5–20s)
+         ========================================================= */
+      #scene-cta {
+        background:
+          radial-gradient(ellipse at 50% 30%, rgba(26, 92, 255, 0.55) 0%, rgba(5, 11, 24, 0) 60%),
+          linear-gradient(180deg, #082050 0%, #050B18 60%, #050B18 100%);
+        z-index: 6;
+      }
+      .cta-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 100px 100px;
+        opacity: 0;
+      }
+      .cta-content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 80px;
+      }
+      .logo-wrapper {
+        position: relative;
+        width: 260px;
+        height: 260px;
+        margin-bottom: 56px;
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .logo-wrapper svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 30px rgba(26, 92, 255, 0.7));
+      }
+      .logo-ring {
+        position: absolute;
+        inset: -24px;
+        border-radius: 50%;
+        border: 2px solid rgba(61, 123, 255, 0.3);
+        opacity: 0;
+      }
+      .logo-ring.outer {
+        inset: -48px;
+        border: 1px dashed rgba(61, 123, 255, 0.2);
+      }
+      .cta-brand {
+        font-family: 'Archivo Black', 'Inter', sans-serif;
+        font-weight: 900;
+        font-size: 108px;
+        line-height: 0.92;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        text-align: center;
+        color: #FFFFFF;
+      }
+      .cta-brand-word {
+        display: block;
+        overflow: hidden;
+      }
+      .cta-brand-word .inner {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(120px);
+      }
+      .cta-brand-word.accent .inner {
+        color: #3D7BFF;
+        text-shadow: 0 0 30px rgba(26, 92, 255, 0.5);
+      }
+      .cta-tagline {
+        font-family: 'Inter', sans-serif;
+        font-size: 32px;
+        font-weight: 500;
+        color: #C8D0E0;
+        letter-spacing: 0.04em;
+        text-align: center;
+        margin-top: 36px;
+        opacity: 0;
+      }
+      .cta-tagline strong { color: #3D7BFF; font-weight: 700; }
+      .cta-pill {
+        position: relative;
+        margin-top: 56px;
+        padding: 26px 68px;
+        border-radius: 100px;
+        background: linear-gradient(90deg, rgba(26, 92, 255, 0.25), rgba(61, 123, 255, 0.25));
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        font-family: 'Inter', sans-serif;
+        font-size: 34px;
+        font-weight: 700;
+        color: #FFFFFF;
+        letter-spacing: 0.05em;
+        opacity: 0;
+        transform: scale(0.85);
+      }
+      .cta-pill .arrow {
+        display: inline-block;
+        margin-left: 18px;
+        color: #3D7BFF;
+      }
+      .cta-pill .pill-inner {
+        display: inline-flex;
+        align-items: center;
+      }
+      .cta-kicker {
+        font-family: 'Inter', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #3D7BFF;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+        opacity: 0;
+      }
+      .corner-accent {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border: 2px solid #3D7BFF;
+        opacity: 0;
+      }
+      .ca-tl { top: 80px; left: 80px; border-right: none; border-bottom: none; }
+      .ca-tr { top: 80px; right: 80px; border-left: none; border-bottom: none; }
+      .ca-bl { bottom: 80px; left: 80px; border-right: none; border-top: none; }
+      .ca-br { bottom: 80px; right: 80px; border-left: none; border-top: none; }
+      .foot-label {
+        position: absolute;
+        bottom: 100px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #6B7A99;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- ========== AMBIENT LAYER (0-20s) ========== -->
+      <div id="ambient-orb" class="clip"
+           data-start="0" data-duration="20" data-track-index="0"></div>
+
+      <!-- ========== ACT 1 — HOOK (0-3.5s) ========== -->
+      <div id="scene-hook" class="scene clip"
+           data-start="0" data-duration="3.5" data-track-index="1">
+        <div class="hook-grid-bg" id="hook-grid"></div>
+        <div class="hook-radial" id="hook-radial"></div>
+
+        <div class="corner-mark corner-tl" id="corner-tl"></div>
+        <div class="corner-mark corner-tr" id="corner-tr"></div>
+        <div class="corner-mark corner-bl" id="corner-bl"></div>
+        <div class="corner-mark corner-br" id="corner-br"></div>
+
+        <div class="hook-center">
+          <div class="hook-kicker" id="hook-kicker">
+            <span class="kicker-dot"></span>ALERT &nbsp;/&nbsp; PERFORMANCE
+          </div>
+          <div class="hook-line"><span class="inner" id="word-1">YOUR</span></div>
+          <div class="hook-line accent"><span class="inner" id="word-2">ADS</span></div>
+          <div class="hook-line"><span class="inner" id="word-3">ARE LEAKING</span></div>
+          <div class="hook-line"><span class="inner" id="word-4">MONEY.</span></div>
+          <div class="hook-underline" id="hook-underline"></div>
+          <div class="hook-sub" id="hook-sub">There is a better way.</div>
+        </div>
+
+        <div class="hook-wipe" id="hook-wipe"></div>
+      </div>
+
+      <!-- ========== ACT 2 — TENSION (3.5-7s) ========== -->
+      <div id="scene-tension" class="scene clip"
+           data-start="3.5" data-duration="3.5" data-track-index="1">
+        <div class="tension-header" id="tension-header">
+          <div class="tension-kicker"><span class="warn-dot"></span>DIAGNOSTIC / MOST ADS</div>
+          <div class="tension-title">Missing<br/>the <strong>basics.</strong></div>
+        </div>
+
+        <div class="tension-grid" id="tension-grid">
+          <div class="t-panel" id="tp1"><div class="t-panel-label">Hook</div><div class="t-panel-val">MISSING</div></div>
+          <div class="t-panel" id="tp2"><div class="t-panel-label">CTR</div><div class="t-panel-val">0.4%</div></div>
+          <div class="t-panel" id="tp3"><div class="t-panel-label">Audience</div><div class="t-panel-val">WRONG</div></div>
+          <div class="t-panel" id="tp4"><div class="t-panel-label">ROAS</div><div class="t-panel-val">0.8×</div></div>
+          <div class="t-panel" id="tp5"><div class="t-panel-label">Creative</div><div class="t-panel-val">STALE</div></div>
+          <div class="t-panel" id="tp6"><div class="t-panel-label">CTA</div><div class="t-panel-val">ABSENT</div></div>
+          <div class="t-panel" id="tp7"><div class="t-panel-label">Format</div><div class="t-panel-val small">GENERIC</div></div>
+          <div class="t-panel" id="tp8"><div class="t-panel-label">Budget</div><div class="t-panel-val small">BURNING</div></div>
+          <div class="t-panel" id="tp9"><div class="t-panel-label">Results</div><div class="t-panel-val">NONE</div></div>
+        </div>
+
+        <svg id="x-svg" viewBox="0 0 920 1320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line id="x-line1" class="x-line" x1="40" y1="40" x2="880" y2="1280"/>
+          <line id="x-line2" class="x-line" x1="880" y1="40" x2="40" y2="1280"/>
+        </svg>
+
+        <div class="tension-footer" id="tension-footer">
+          It's time to rethink performance creative.
+        </div>
+
+        <div id="flash-layer"></div>
+      </div>
+
+      <!-- ========== ACT 3 — REVEAL (7-12.5s) ========== -->
+      <div id="scene-reveal" class="scene clip"
+           data-start="7" data-duration="5.5" data-track-index="1">
+        <div class="reveal-grid" id="reveal-grid"></div>
+        <div class="orb-bg" id="orb-bg"></div>
+
+        <div class="reveal-content">
+          <div class="reveal-kicker" id="reveal-kicker">
+            <span class="kdot"></span>INTRODUCING
+          </div>
+          <div class="brand-word brand-sapphire"><span class="inner" id="brand-w1">SAPPHIRE</span></div>
+          <div class="brand-word brand-studios"><span class="inner" id="brand-w2">STUDIOS</span></div>
+          <div class="divider" id="divider"></div>
+          <div class="services">
+            <div class="service-pill" id="svc1">
+              <span class="dot"></span>UGC &nbsp;/&nbsp; PGC
+              <span class="svc-tag">CREATOR-LED</span>
+            </div>
+            <div class="service-pill" id="svc2">
+              <span class="dot"></span>AIGC &nbsp;+&nbsp; CGI
+              <span class="svc-tag">NEXT-GEN</span>
+            </div>
+            <div class="service-pill" id="svc3">
+              <span class="dot"></span>ANIMATIONS
+              <span class="svc-tag">MOTION</span>
+            </div>
+            <div class="service-pill" id="svc4">
+              <span class="dot"></span>DATA-BACKED ADS
+              <span class="svc-tag">PERFORMANCE</span>
+            </div>
+          </div>
+          <div class="tagline" id="tagline">
+            The creative engine <strong>that converts.</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== ACT 4 — AUTHORITY (12.5-16.5s) ========== -->
+      <div id="scene-authority" class="scene clip"
+           data-start="12.5" data-duration="4" data-track-index="1">
+        <div class="auth-glow" id="auth-glow"></div>
+
+        <div class="auth-panel" id="auth-panel">
+          <div class="auth-kicker" id="auth-kicker">TRUSTED PERFORMANCE</div>
+          <div class="auth-heading" id="auth-heading">The numbers<br/>speak loudly.</div>
+
+          <div class="ticker-wrap" id="ticker-wrap">
+            <div class="ticker" id="ticker">
+              <span>AMAZON</span><span class="bullet">◆</span>
+              <span>NIKE</span><span class="bullet">◆</span>
+              <span>WALMART</span><span class="bullet">◆</span>
+              <span>DYSON</span><span class="bullet">◆</span>
+              <span>+ 47 BRANDS</span><span class="bullet">◆</span>
+              <span>AMAZON</span><span class="bullet">◆</span>
+              <span>NIKE</span><span class="bullet">◆</span>
+              <span>WALMART</span><span class="bullet">◆</span>
+              <span>DYSON</span><span class="bullet">◆</span>
+              <span>+ 47 BRANDS</span><span class="bullet">◆</span>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card" id="stat1">
+              <div class="stat-value" id="stat1-val">0+</div>
+              <div class="stat-label">Campaigns Shipped</div>
+              <div class="stat-badge">SCALED</div>
+            </div>
+            <div class="stat-card" id="stat2">
+              <div class="stat-value" id="stat2-val">0.0×</div>
+              <div class="stat-label">Average ROAS</div>
+              <div class="stat-badge">MEASURED</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sweep-layer" id="sweep"></div>
+      </div>
+
+      <!-- ========== ACT 5 — CTA (16.5-20s) ========== -->
+      <div id="scene-cta" class="scene clip"
+           data-start="16.5" data-duration="3.5" data-track-index="1">
+        <div class="cta-grid" id="cta-grid"></div>
+
+        <div class="corner-accent ca-tl" id="ca-tl"></div>
+        <div class="corner-accent ca-tr" id="ca-tr"></div>
+        <div class="corner-accent ca-bl" id="ca-bl"></div>
+        <div class="corner-accent ca-br" id="ca-br"></div>
+
+        <div class="cta-content">
+          <div class="cta-kicker" id="cta-kicker">LET'S BUILD &nbsp;·&nbsp; LET'S SCALE</div>
+
+          <div class="logo-wrapper" id="logo-wrapper">
+            <div class="logo-ring" id="logo-ring-inner"></div>
+            <div class="logo-ring outer" id="logo-ring-outer"></div>
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sap-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3D7BFF"/>
+                  <stop offset="100%" stop-color="#1A5CFF"/>
+                </linearGradient>
+              </defs>
+              <polygon points="110,16 196,110 110,110" fill="url(#sap-grad)" stroke="#3D7BFF" stroke-width="2"/>
+              <polygon points="110,204 24,110 110,110" fill="#0A3ACC" stroke="#FFFFFF" stroke-width="2"/>
+              <polygon points="110,16 24,110 110,110" fill="#1A5CFF" opacity="0.7"/>
+              <polygon points="110,204 196,110 110,110" fill="#3D7BFF" opacity="0.9"/>
+              <circle cx="110" cy="110" r="8" fill="#FFFFFF"/>
+            </svg>
+          </div>
+
+          <div class="cta-brand">
+            <span class="cta-brand-word"><span class="inner" id="cta-w1">SAPPHIRE</span></span>
+            <span class="cta-brand-word accent"><span class="inner" id="cta-w2">STUDIOS</span></span>
+          </div>
+
+          <div class="cta-tagline" id="cta-tagline">
+            Performance creative, <strong>backed by data.</strong>
+          </div>
+
+          <div class="cta-pill" id="cta-pill">
+            <span class="pill-inner">sapphirestudios.co<span class="arrow">→</span></span>
+          </div>
+        </div>
+
+        <div class="foot-label" id="foot-label">— BUILT WITH CODE · RENDERED IN HYPERFRAMES —</div>
+      </div>
+
+      <!-- ========== NOISE OVERLAY (persistent, on top) ========== -->
+      <div id="noise-overlay" class="clip"
+           data-start="0" data-duration="20" data-track-index="9"></div>
+
+      <!-- ========== AUDIO ========== -->
+      <audio
+        id="bg-music"
+        class="clip"
+        data-start="0"
+        data-duration="20"
+        data-track-index="10"
+        data-volume="0.6"
+        src="./assets/music.mp3"
+      ></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ==================================================
+      // AMBIENT LAYER — slow rotation through 20s
+      // ==================================================
+      tl.to("#ambient-orb", {
+        rotation: 360, duration: 20, ease: "none", transformOrigin: "50% 50%"
+      }, 0);
+
+      // ==================================================
+      // ACT 1 — HOOK (0–3.5s)
+      // ==================================================
+      tl.to("#hook-grid", { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
+      tl.to(["#corner-tl", "#corner-tr", "#corner-bl", "#corner-br"], {
+        opacity: 1, duration: 0.3, stagger: 0.06, ease: "power2.out"
+      }, 0.1);
+      tl.to("#hook-kicker", {
+        opacity: 1, duration: 0.5, ease: "power3.out"
+      }, 0.3);
+      tl.to("#word-1", { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 0.5);
+      tl.to("#word-2", { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 0.9);
+      tl.to("#word-3", { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 1.3);
+      tl.to("#word-4", { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 1.7);
+      // Accent word punch scale
+      tl.fromTo("#word-2", { scale: 1 }, {
+        scale: 1.08, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1,
+        transformOrigin: "50% 50%"
+      }, 1.0);
+      // Underline
+      tl.to("#hook-underline", {
+        width: 760, duration: 0.5, ease: "power3.inOut"
+      }, 2.1);
+      // Radial pulse
+      tl.to("#hook-radial", {
+        opacity: 1, scale: 1, duration: 0.9, ease: "power2.out"
+      }, 2.0);
+      tl.to("#hook-radial", {
+        opacity: 0.25, duration: 0.5, ease: "power2.inOut"
+      }, 2.9);
+      tl.to("#hook-sub", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, 2.5);
+      // Wipe exit (scene ends at 3.5)
+      tl.to("#hook-wipe", {
+        y: 0, duration: 0.4, ease: "power3.inOut"
+      }, 3.1);
+
+      // ==================================================
+      // ACT 2 — TENSION (3.5–7s)
+      // ==================================================
+      const T0 = 3.5;
+      tl.to("#tension-header", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, T0 + 0.1);
+      const panelOrder = ["#tp5", "#tp2", "#tp8", "#tp1", "#tp9", "#tp3", "#tp7", "#tp4", "#tp6"];
+      panelOrder.forEach((id, i) => {
+        tl.to(id, {
+          opacity: 1, scale: 1, duration: 0.35, ease: "power4.out"
+        }, T0 + 0.5 + i * 0.07);
+      });
+      // Grid shake
+      tl.to("#tension-grid", { x: 6, duration: 0.055, ease: "none" }, T0 + 1.70);
+      tl.to("#tension-grid", { x: -6, duration: 0.055, ease: "none" }, T0 + 1.77);
+      tl.to("#tension-grid", { x: 5, duration: 0.055, ease: "none" }, T0 + 1.84);
+      tl.to("#tension-grid", { x: -4, duration: 0.055, ease: "none" }, T0 + 1.91);
+      tl.to("#tension-grid", { x: 0, duration: 0.08, ease: "none" }, T0 + 1.98);
+      // Footer
+      tl.to("#tension-footer", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, T0 + 1.4);
+      // X draws
+      tl.to("#x-svg", { opacity: 1, duration: 0.05 }, T0 + 2.2);
+      tl.fromTo("#x-line1",
+        { attr: { "stroke-dasharray": "1500", "stroke-dashoffset": 1500 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.45, ease: "power3.inOut" },
+      T0 + 2.2);
+      tl.fromTo("#x-line2",
+        { attr: { "stroke-dasharray": "1500", "stroke-dashoffset": 1500 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.45, ease: "power3.inOut" },
+      T0 + 2.4);
+      tl.fromTo("#x-svg", { scale: 1 }, {
+        scale: 1.05, duration: 0.1, ease: "power2.out", yoyo: true, repeat: 1,
+        transformOrigin: "50% 50%"
+      }, T0 + 2.85);
+      // Flash
+      tl.to("#flash-layer", { opacity: 1, duration: 0.08, ease: "power2.in" }, T0 + 3.15);
+      tl.to("#flash-layer", { opacity: 0, duration: 0.22, ease: "power2.out" }, T0 + 3.25);
+
+      // ==================================================
+      // ACT 3 — REVEAL (7–12.5s)
+      // ==================================================
+      const R0 = 7.0;
+      tl.to("#reveal-grid", { opacity: 1, duration: 0.6, ease: "power2.out" }, R0);
+      tl.to("#orb-bg", {
+        opacity: 1, scale: 1, duration: 1.5, ease: "power3.out"
+      }, R0);
+      tl.to("#reveal-kicker", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, R0 + 0.2);
+      tl.to("#brand-w1", {
+        opacity: 1, y: 0, duration: 0.7, ease: "power4.out"
+      }, R0 + 0.4);
+      tl.to("#brand-w2", {
+        opacity: 1, y: 0, duration: 0.7, ease: "power4.out"
+      }, R0 + 0.65);
+      tl.fromTo("#brand-w2", { scale: 1 }, {
+        scale: 1.03, duration: 0.15, ease: "power2.out", yoyo: true, repeat: 1,
+        transformOrigin: "50% 50%"
+      }, R0 + 1.3);
+      tl.to("#divider", {
+        width: 920, duration: 0.6, ease: "power3.inOut"
+      }, R0 + 1.5);
+      tl.to("#svc1", { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, R0 + 1.9);
+      tl.to("#svc2", { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, R0 + 2.15);
+      tl.to("#svc3", { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, R0 + 2.4);
+      tl.to("#svc4", { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, R0 + 2.65);
+      // Confidence pulse
+      tl.to("#svc1", { scale: 1.02, duration: 0.15, ease: "power2.out" }, R0 + 3.3);
+      tl.to("#svc2", { scale: 1.02, duration: 0.15, ease: "power2.out" }, R0 + 3.35);
+      tl.to("#svc3", { scale: 1.02, duration: 0.15, ease: "power2.out" }, R0 + 3.4);
+      tl.to("#svc4", { scale: 1.02, duration: 0.15, ease: "power2.out" }, R0 + 3.45);
+      tl.to("#svc1", { scale: 1.0, duration: 0.4, ease: "power2.inOut" }, R0 + 3.5);
+      tl.to("#svc2", { scale: 1.0, duration: 0.4, ease: "power2.inOut" }, R0 + 3.55);
+      tl.to("#svc3", { scale: 1.0, duration: 0.4, ease: "power2.inOut" }, R0 + 3.6);
+      tl.to("#svc4", { scale: 1.0, duration: 0.4, ease: "power2.inOut" }, R0 + 3.65);
+      tl.to("#tagline", {
+        opacity: 1, duration: 0.6, ease: "power2.out"
+      }, R0 + 4.0);
+      // Dim before exit
+      tl.to(["#reveal-kicker", "#divider", ".services", "#tagline"], {
+        opacity: 0.2, duration: 0.5, ease: "power2.inOut"
+      }, R0 + 5.0);
+
+      // ==================================================
+      // ACT 4 — AUTHORITY (12.5–16.5s)
+      // ==================================================
+      const A0 = 12.5;
+      tl.to("#auth-glow", {
+        opacity: 1, scale: 1, duration: 1.2, ease: "power3.out"
+      }, A0);
+      tl.fromTo("#auth-panel",
+        { opacity: 0, y: 140 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+      A0 + 0.15);
+      tl.to("#auth-kicker", { opacity: 1, duration: 0.4, ease: "power2.out" }, A0 + 0.5);
+      tl.to("#auth-heading", { opacity: 1, duration: 0.5, ease: "power3.out" }, A0 + 0.6);
+      tl.to("#ticker-wrap", { opacity: 1, duration: 0.5, ease: "power2.out" }, A0 + 0.9);
+      tl.fromTo("#ticker", { x: 0 }, {
+        x: -1600, duration: 3.5, ease: "none"
+      }, A0 + 0.9);
+      tl.to("#stat1", {
+        opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)"
+      }, A0 + 1.5);
+      // Count up
+      const stat1Counter = { val: 0 };
+      tl.to(stat1Counter, {
+        val: 320,
+        duration: 1.0,
+        ease: "power2.out",
+        onUpdate: function() {
+          const el = document.querySelector("#stat1-val");
+          if (el) el.textContent = Math.round(stat1Counter.val) + "+";
+        }
+      }, A0 + 1.5);
+      tl.to("#stat2", {
+        opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)"
+      }, A0 + 1.8);
+      const stat2Counter = { val: 0 };
+      tl.to(stat2Counter, {
+        val: 4.8,
+        duration: 1.0,
+        ease: "power2.out",
+        onUpdate: function() {
+          const el = document.querySelector("#stat2-val");
+          if (el) el.textContent = stat2Counter.val.toFixed(1) + "×";
+        }
+      }, A0 + 1.8);
+      // Exit: panel fades, sweep
+      tl.to("#auth-panel", {
+        opacity: 0, y: -40, duration: 0.4, ease: "power3.in"
+      }, A0 + 3.4);
+      tl.to("#sweep", {
+        y: 0, duration: 0.5, ease: "power3.out"
+      }, A0 + 3.5);
+
+      // ==================================================
+      // ACT 5 — CTA (16.5–20s)
+      // ==================================================
+      const C0 = 16.5;
+      tl.to("#cta-grid", { opacity: 1, duration: 0.6, ease: "power2.out" }, C0);
+      tl.to(["#ca-tl", "#ca-tr", "#ca-bl", "#ca-br"], {
+        opacity: 1, duration: 0.4, stagger: 0.08, ease: "power2.out"
+      }, C0 + 0.1);
+      tl.to("#cta-kicker", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, C0 + 0.3);
+      tl.to("#logo-wrapper", {
+        opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.6)"
+      }, C0 + 0.4);
+      tl.to("#logo-ring-inner", {
+        opacity: 1, rotation: 90, duration: 1.0, ease: "power2.out"
+      }, C0 + 0.6);
+      tl.to("#logo-ring-outer", {
+        opacity: 0.6, rotation: -180, duration: 2.0, ease: "none"
+      }, C0 + 0.6);
+      tl.to("#cta-w1", {
+        opacity: 1, y: 0, duration: 0.6, ease: "power4.out"
+      }, C0 + 1.0);
+      tl.to("#cta-w2", {
+        opacity: 1, y: 0, duration: 0.6, ease: "power4.out"
+      }, C0 + 1.2);
+      // Brand pulse
+      tl.fromTo(".cta-brand", { scale: 1 }, {
+        scale: 1.03, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1,
+        transformOrigin: "50% 50%"
+      }, C0 + 1.6);
+      tl.to("#cta-tagline", {
+        opacity: 1, duration: 0.5, ease: "power2.out"
+      }, C0 + 1.9);
+      tl.to("#cta-pill", {
+        opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.5)"
+      }, C0 + 2.2);
+      tl.fromTo("#cta-pill", { scale: 1 }, {
+        scale: 1.04, duration: 0.25, ease: "power2.inOut", yoyo: true, repeat: 1,
+        transformOrigin: "50% 50%"
+      }, C0 + 2.7);
+      tl.to("#foot-label", {
+        opacity: 1, duration: 0.4, ease: "power2.out"
+      }, C0 + 2.6);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
