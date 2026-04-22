@@ -2,6 +2,8 @@
 .thumbnails/
 transcript.json
 
+renders/
+
 # Dependencies
 node_modules/
 
